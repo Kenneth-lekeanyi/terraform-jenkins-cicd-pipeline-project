@@ -1,1 +1,1 @@
-# terraform-jenkins-cicd-pipeline-project
+# Terraform-Jenkins-CICD-Pipeline-Project
