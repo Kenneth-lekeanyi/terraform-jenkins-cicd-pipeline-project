@@ -38,17 +38,17 @@ pipeline {
             }
         }
         // Deploy Terraform Infrastructure
-        stage('Deploy Infrastructure') {
-            steps {
-                sh 'terraform apply --auto-approve'
-            }
-        }
-        // Destroy Environment
-        // stage('Terraform Destroy') {
+        // stage('Deploy Infrastructure') {
         //     steps {
-        //         sh 'terraform destroy --var-file=prod.tfvars --auto-approve'
+        //         sh 'terraform apply --auto-approve'
         //     }
         // }
+        Destroy Environment
+        stage('Terraform Destroy') {
+            steps {
+                sh 'terraform destroy --var-file=prod.tfvars --auto-approve'
+            }
+        }
     }
     post {
     always {
