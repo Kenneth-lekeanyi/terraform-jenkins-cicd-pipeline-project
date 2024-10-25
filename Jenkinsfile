@@ -43,10 +43,10 @@ pipeline {
         //         sh 'terraform apply --auto-approve'
         //     }
         // }
-        Destroy Environment
+        // Destroy Environment
         stage('Terraform Destroy') {
             steps {
-                sh 'terraform destroy --var-file=prod.tfvars --auto-approve'
+                sh 'terraform destroy --auto-approve'
             }
         }
     }
