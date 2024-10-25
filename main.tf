@@ -17,3 +17,12 @@ resource "google_compute_instance" "terraform-vm-instance" {
     }
   }
 }
+
+# This code deploys the gcs Bucket
+resource "google_storage_bucket" "prod-private-buckets" {
+  name          = "prod-no-public-access-bucket-kl-${count.index}"
+  location      = "us-central1"
+  force_destroy = true
+  public_access_prevention = "enforced"
+  count         = 3
+}
