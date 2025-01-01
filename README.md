@@ -63,6 +63,39 @@
 - Now, as we have set up the jenkins Pipeline script, our main.tf is carrying the resources, we now need to commit the changes and push it to GitHub. So do
 - And we are assuming that the infrastructure is just this VM Instances inside the main.tf
 - But there could be thousand resources inside this Main.tf alone. AND we shall deploy it now and later the Manager called kENNETH to add additional resources which we shall add it later.
+- Now, go to **Provider.tf** and in line 17, update the project ID there. SO, go copy the Project ID of your Environment where you want the resources to get deployed there and come and replace it with the **Project ID** that is there now.
+- Now, go back to the Jenkinsfile. And there in the last lines where you have "Post Section", there is a Slack Channel that is needed. This is a channel that habours all the members of the team. So you need to update this channed in Line 56.
+
+# 3) Create a Slack Notification Channel
+- To create a Slack Channel, follow this procedure;
+- First, we need to follow or get into this Workstation. So use the link to get into that Worksatation where you can then create a slack channel or Account for your team
+- https://join.slack.com/t/jjtechtowerba-zuj7343/shared_invite/zt-24mgawshy-EhixQsRyVuCo8UD~AbhQYQ
+
+- When you click on it, you will see this pop up. **See what Realworld-cicd-Pipeline-projects is up to**
+- Click on "Continue with Google".
+- Select any Gmail Address that you have Access to it.
+- then click on "Continue"
+- Then click on Create Account"
+- Now, click on "Open Link" or if you see something like "Open slack App", you can click on it as well.
+- If you see it says "Not Supported", try to use another Browser. By copy the link and paste in another Browser like Chrome.
+- Now, on this Workspace, we have to create your own Slack Account for your team. So
+
+- At the top left of this Workstation, you will see the name appear there as **Realworld-cicd-pipeline-project**
+- Just below it, locate and click on Add Channel".
+- Then on the pop up, click on "Create a new channel".
+- Name of the channel: **KL123-terraform-cicd-alerts**
+- Then click on "Next"
+- Visibility: PUBLIC, or Private [select **Private**]  {But you can keep it public so that other people can see and join it}
+- Then click on "Create" to create the channel
+- Enter email: Add email of whoever you want him to join and be part of the team **OR** you can skip if you dont want them to join
+- **Now, the channel or Account has been created**
+
+- Now, copy the name of the channel which is **KL123-terraform-cicd-alerts** and go paste it in the Jenkinsfile (in the V.S Code) line 56 to replace the one that is there. Leave the pound. Dont remove the #.
+- So, any alert (whether success or failure), will be sent to this channel where all team members are part of it.
+- Now, commit the changes and push. So while inside **terraform-jenkins-cicd-pipeline-project**, do
+  - git add .
+  - git commit -m "updated configuration files"
+  - git push
 
 
 
