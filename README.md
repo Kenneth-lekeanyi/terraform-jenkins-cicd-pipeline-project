@@ -111,6 +111,63 @@
 
 - Now, these are the various steps that you have to follow to set up the integration. But before that,
 - Go to step 3 and copy the 2 things in red and save them somewhere handy
+  - **Team Subdomain:** `realworldcicdpipeline`  {copy this highlighted realworldcicdpipeline and paste somewhere in your Note pad. It is your Workspace ID}
+  - **Integration Token Credential ID:** Create a secret text credential using `pz99Tu/onFu710v12wecBnnt` as a value. Copy the highlighted value and save somewhere
+  - Once you finish copying and keeping them somewhere, scroll down and click on "Save settings" to save it. {You can then leave the apge open}
+
+# 4) Set up a Jenkins Environment that will use it to be able to connect to the Pipeline.
+- To set up the Jenkins Environent, first of create a Jenkins Server. so, create an Instance
+  - On the console, click on **Create instance**
+  - Name: **jenkins-cicd-deploy-infrastructure**
+  - machine type: **e2-standard-4**
+  - Operating system and storage
+    - Click on "CHANGE"
+    - os: **Ubuntu**
+    - Version: **22.04 LTS (X86/64)**
+    - Size: **30**  {because Jenkins is big}
+    - Click on "Select"
+  - Under "Security" for SA, give full Access
+  - Access scopes
+    - Check this box on "Allow full access to all cloud APIs"
+  - Our Firewall Rule for Port 8080 Jenkins was already created. So Firewall is fine
+  - under Advance
+    - Automation: paste this automation script here. It begins from **#!/bin/bash** and end on **sudosnap install terraform** 
+      #!/bin/bash
+sudo apt update -y
+sudo touch /etc/apt/keyrings/adoptium.asc
+sudo wget -O /etc/apt/keyrings/adoptium.asc https://packages.adoptium.net/artifactory/api/gpg/key/public
+echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
+sudo apt update -y
+sudo apt install temurin-17-jdk -y
+/usr/bin/java --version
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+                  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+                  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+                              /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update -y
+sudo apt-get install jenkins -y
+sudo systemctl start jenkins
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+#Install docker
+sudo apt install docker.io -y
+sudo usermod -aG docker ubuntu
+newgrp docker
+sudo chmod 777 /var/run/docker.sock
+docker version
+sudo usermod -aG docker jenkins
+
+#Install Terraform
+sudo snap install terraform
+
+- Now, click on "Create".
+- Now, log into the instance. So copy the External IP of this newly created Jenkins Server, take it to a New Browser and do 8080 to access Jenkins. So do]
+  - 34.45.98.102:8080
+  - **Jenkins UI comes up**
+
+# 5) Procceeed to Unlock Jenkins
+- Now, copy the path of the password and take it to the Jenkisn server
 
 
 
