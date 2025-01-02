@@ -169,7 +169,58 @@ sudo snap install terraform
 # 5) Procceeed to Unlock Jenkins
 - Now, copy the path of the password and take it to the Jenkisn server
 
+- Log into the Jenkins instance on V.S Code, you can just use the shell or ssh system. Since this is just a one time login thing, so
+  - click on ssh
+  - Authorize
+  - As it comes up, do
+  - `sudo cat <paste the path here>
+  - Now, copy the password and take it to the Jenkins UI.
+  - Paste the password in the Jenkins Password or addministrator Password box and click on "Continue"
+  - Click now on "Install suggested plugins"
 
+- On **Create First Admin User** page that pops up;
+  - username: **admin**
+  - password: **admin**
+  - Confirm password: **admin**
+  - Full name: **Kenneth**
+  - Email address: **kenneth@gamil.com**
+  - Click now on **Save** and **Continue**
+  - Then click on **Save** and **Finish**
+  - Then click on **Start using Jenkins**
+ 
+  - **WELCOME TO JENKINS**
+  - On this Welcome to Jenkins page that pops up,
+  - Now we are going to install the Slack plugins that will be used for that integration with other tools like `Terraform and slack`
+  - click now on "Manage Jenkins"
+  - Then click on "Plugins"
+  - Then locate on the left and click on "Available Plugins"
+    - Search for Slack
+    - Then check the box against Slack Notification.
+    - Then click on "Install" at the top right.
+
+  - Now, at the top, click again on "Manage Jenkins"
+  - Now, click on "Systems".
+  - Now, scroll down all the way to the bottom and locate "Slack"
+  - Workspace: `realworldcicdpipeline` {Paste the Team subdomain here}
+  - Credentials
+    - Click on "**+Add**" to add the credentials
+    - Then on the pop up page, click on "Jenkins".
+    - On the pop upp page or on the Jenkins Credentials Provider: Jenkins
+      - Kind
+      - select "Secret text"
+      - Secret: `pz99Tu/onFu710v12wecBnnt` {Paste the integration token credential here}
+      - ID: **slack-token**
+      - click now on "Add"
+
+  - On the slack page that emerge, it should appear as follows
+    - Workspace: **realworldcicdpipeline**
+    - Credentials: select **slack-token**
+    - Default channel/member id: Go to V.S Code and copy the Slack send channel and paste here **#KL123-terraform-cicd-alerts**
+    - Then click on "Test connection" at the bottom right
+    - Now click on "Apply" and "Save"
+    - Now, go to the Slack Channel that you created. There should be a message there from Jenkins now, saying {you are all set}
+   
+  - Now, go back to the Jenkins UI
 
 
 
