@@ -97,6 +97,20 @@
   - git commit -m "updated configuration files"
   - git push
 
+- Now, there are few things we still need to do at the level of Slack. So go back to Slack (i.e to the **KL123-terraform-cicd-alerts** channel)
+  - Below the search bar at the top (I.e immediately above messages, you have your name of the channel there. click on that name carrying a small lock by the side
+  - **KL123-terraform-cicd-alerts**
+- A page will pop will pop up in the middle, Locate and click on "Integration"
+- (So to integrate slack and jenkins, we need to generate a token in slack that we would hand it over to jenkins for them to integrate with each other). So its this token that will provide jenkins access slack.
+- Then, under "Apps", locate and click on "Add an App".
+- On the "Add Apps to **KL123-terraform-cicd-alerts** page that pops up, locate "Jenkins" and click on "View", which is beside it.
+- Then click on "**Configuration**"
+- Now, click on "Add to slack".
+- On the "Post to channel section that comes up, use the drop down to select **KL123-terraform-cicd-alerts**.
+- Then click on "Add Jenkins CI integration".
+
+- Now, these are the various steps that you have to follow to set up the integration. But before that,
+- Go to step 3 and copy the 2 things in red and save them somewhere handy
 
 
 
