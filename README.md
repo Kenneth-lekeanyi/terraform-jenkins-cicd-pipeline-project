@@ -27,7 +27,7 @@
 - Add a README.md file
 - Then create the Repository
 - Now, clone this repository. So, copy the cloned URL under HTTPS using the clipboard
-- Then, go to your local or VS Code and clone it there by doing **git clone <paste the cloned URL here> and enter to clone it.
+- Then, go to your local or VS Code and clone it there by doing **git clone <paste the cloned URL here>** and enter to clone it.
 
 - 
 - Now, since the template will be in my Remote GitHub Account,
