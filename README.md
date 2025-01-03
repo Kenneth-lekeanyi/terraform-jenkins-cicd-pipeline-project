@@ -221,6 +221,49 @@ sudo snap install terraform
     - Now, go to the Slack Channel that you created. There should be a message there from Jenkins now, saying {you are all set}
    
   - Now, go back to the Jenkins UI
+  - `Eventhough Jenkins will be provisioning these resources, there is something we need to provide authorization to it, for those resources to actually be created or provisioned in Google Cloud. So we need to give Athorization to that Jenkins Server carrying Jenkins, to be able to provision resources. So we need the Authorization to be given for resources in "Service A" (Jenkins VM) to do something in "Service B (which are other resources to be created). So we need a SA to be able to do this.` So, go to
+  - Go to IAM.
+  - `Remember that Jenkins on its own cannot access those resources. But since it is running on a VM, its easy for that Jenkins which is running inside that VM to use the permissions or Authorizations given to the SA in that VM to be able to access those other resources including Slack. Because without that, Jenkins will never be able to provision anything`.
+  - `To first see the SA that is being used in this VM, go to the Jenkins VM and click on its name.`
+  - `Type "Service" in the box at the top right and do "Command + F" to populate Service.`
+  - `Scroll down to see the SA that this VM Instance is using`.
+  - `Click on "SHOW DETAILS" to see the resources that this VM can access using this SA.`
+  - `But since Compute Engine and other resources are disabled, we can't use this VM to access them, unless we enable everything.` If not, we cannever be able to use Jenkins that is running in this VM Instance to be able to create any resources.` `***For security reason, Google Cloud provided this as a Security measure. So that people dont create a resource and use it to access all resources***.` `So this SA have Editor Role (And Editor Role is like second to **Owner Role**. So it has permission to do everything. But we cannot use this SA to create any resources because of this API. (Which is like that for Security reasons)`. `So, we have to enable it. and since the VM is already running, we have to stop it inother to enable the SA API. We were supposed to do it at the creation time.`And once we stop it, Jenkins will become very slow. So we shall do it at the end.`
+ 
+- Now, go back to your Jenkins UI and
+- Click on "Tools".
+- Under "Git Installation", check this box on ***install automatically***
+- Now, click on "Apply" and click on "Save".
+- Now, go back and click on "Manage Jenkins"
+  - Click on "+New item"
+  - Name: `jenkins-terraform-cicd-pipeline-project`
+  - Then select: `Pipeline`
+  - Then, click on `OK`.
+- On the "General" page that pops up, Locate and check this box on **GitHub project**
+- Paste the cloned Repo URL here {It ends with ***.git***
+- Under "Build Trigers", select to check this box on **GitHub hook trigger for gitscm polling**
+- Scroll down under "Advanced Project Options"
+  - Pipeline
+  - Definition
+    - Select: `Pipeline script from scm`
+    - SCM: Select: `Git`
+    - Script path: `Jenkinsfile`
+    - Repository URL: `https://github.com/kenneth-lekeanyi/terraform-jenkins-cicd-pipeline-project.git`
+    - Branch specifier:
+    - `*/main`
+    - Click now on `Save`.
+- If you run the Pipeline now by clicking on "Build Now", it will normally break.
+- It is not giving us a Pipeline View. So we still need to install the "Pipeline view Plugins".
+- So click on "**DASHBOARD**"
+  - then click on "Manage Jenkins"
+  - Then click on "Plugins"
+  - Then click on "Available plugins"
+  - on the search box, type and search for **Pipeline View** and check the box on ***Pipeline: stage view***
+  - Then click on "Install"
+- You can now click on the Pipeline Name, you will see the Pipeline display view now.
+- If you go to your Slack Channel, you will see a failure mesage that heas sent it to the team.
+- 
+- Now, go back to IAM and click on it for the SA under Pricipal, change the "Editor Role" to "Owner Role"
 
 
 
