@@ -264,6 +264,98 @@ sudo snap install terraform
 - If you go to your Slack Channel, you will see a failure mesage that heas sent it to the team.
 - 
 - Now, go back to IAM and click on it for the SA under Pricipal, change the "Editor Role" to "Owner Role"
+  - So click on the "Pencil icon" against the SA
+  - `Remember that, we checked the S.A that the Jenkins VM Instance is making use of. And this is the SA that it is making use of it`.
+ 
+  - On the pop up page, change the basic Role there to "Owner Role". So,
+    - On the Filter box, scroll down to select "Basic"
+    - Then on the left, locate and click on "Owner"
+    - Then click on "Save".
+    - So, at this time, the SA that this VM of Jenkins VM Instance is making use of, now has an Owner Role. So, it can now access all Resources mentioned in it.
+
+- Now, go to Jenkins and run the Pipeline again. It fails again.
+- To investigate or Troubleshoot,
+  - Click inside the 1st Failed box or hover your cursor on it
+  - Then click on "Log"
+  - You see that it says "Terraform not found". {Since we tested and it says "Terraform not found", it means Jenkins is not able to reach terraform. So we have to use the `Original way to install teraaform`. In that way, Jenkins will reach it. So
+  - So, go back to the VM Instance and log into it by
+  - clicking on **ssh**
+  - Then click on **Athorize**
+  - # you are now logged in.
+  - Now, run this commands to install Terraform and some other things.
+  - {You can still insert these commands at the end of the Automation Script. So that you will not come later to be doing the commands again}.
+  - So run `sudo apt-get update && sudo apt-get install -y gnupg software-properties-common` 
+  - Now, run this second command so that you will not have that Terraform support issues agan. So run `wget -O- https://apt.releases.hashicorp.com/gpg | \
+gpg --dearmor | \
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null`
+  - Then, run this command now still installing terraform. So run `gpg --no-default-keyring \
+--keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+--fingerprint`
+  - Now, run this command. So run `echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list`
+  - Now, update the system by running this command to update all of those packages. So run `sudo apt update`
+  - Then, you install terraform, by running `sudo apt-get install terraform`
+
+- Now, go back to the Jenkins UI and run that Pipeline again. So in the Jenkins UI;
+  - click again on "Build Now".
+  - ***Now, its able to run all the stages of terraform and even Manual Approval for you to Approve it***.
+  - However, it fails because the API for the SA was not enabled. So, go now to "Compute Engine" and stop the instance. { The Instance has to be in a "Stop State" for us to enable the API}. Reason it was good for us to enable it during creation time.
+  - After stoping it, click on the name of the Instance. So click on **Jenkins-cicd**
+  - Then, click on "Edit"
+  - Scroll down to locate "Access Scopes" under **Service Accounts**
+    - Access Scopes
+      - Check the box on **Allow full access to all cloud APIs**
+    - Now, click on "Save".
+    - Now, Start the VM Instance.
+  - expect it to be much slower now.
+
+  - If you now go back to your Slack Channel, you will realize that, you have multiple Failure messages. This is because we have ran the pipeline multiple times and it has failed. So, Jenkins is informing you through the Slack Team Channel.
+  - Since we have stopped and restarted the Instance, The External IP has changed. So, go copy the new External IP and take it to a New Browser and do
+  - **34.170.88.37:8080**
+  - Its now very slow because of the Stop
+ 
+  - # JENKINS UI COMES UP
+  - `So, its actually Jenkins doing the Job through or using the Jenkinsfile. So, Jenkins is actually using the Jenkinsfile to deploy the resources which are in the repository into the Cloud Environment. So, the Jenkins Server need not be a big OS that will be consuming a lot of resources or finances. Its just there to deploy the resources`.
+  - Now, click on the pipeline name and then click on "Build Now".
+  - You will see that it succeeded in all stages.
+  - Now, go to the Console, you will see that a new VM has been created as per what we have in our **main.tf**
+  - Now, when you go to Slack, you will see a new succesfull message with a Green bar.
+ 
+# 6) Configure GitHub Webhook.
+- Now, lets go and configure the GitHub Webhook. So,
+- Go to your GitHub Account and go into that "**Terraform-Jenkins-cicd-pipeline-project**" Repository
+  - Once in the Repository, click on "Settings" at the top.
+  - Then scroll down to locate and click on "**Webhook**"
+  - Then you go to the top right and click on "Add Webhook"
+  - Sign into your GitHub Account.
+  - Content type: Select `application/jason`
+  - Payload URL: `http://34.170.88.37:8080/github-webhook/`     ***{i.e http://JENKINS_PUBLIC_IP_ADDRESS:8080/github-webhook/}***
+ 
+  - Now, check the box against **Enable SSL Verification**
+  - Again, check this other box against **just the push event**
+  - Then check this other box against **Active**
+ 
+  - Click now on "Add Webhook"
+  - Now, Refresh.
+    - {when you see a small green checkmark, it means the GitHub Webhook was able to reach and connect to Jenkins succesfully}.
+   
+  # 7) Testing
+  - Now, lets test to see that the GitHub Webhook is working perfectly well and connected to Jenkins for the resources to get deployed using this Jenkins Pipeline to the Console once its configuration code lands in the GitHub Repository.
+  - So, go back to V.S Code and in the **Main.tf**, add the configuration or resource block of another resource like "gcs bucket.tf".
+  - Now, in that project repository, get it inside there and run the git command to to push it to GitHub. So do
+  - `git add .`
+  - `git commmit -m "added gcs bucket configuration file"`
+  - `git push`
+  - Now, go to the Jenkins UI and see how the Pipeline automatically kicks-in without us doing anything.
+ 
+  - Now, go to gcs and see those Buckets that has been created.
+  - Then go to slack and see the new message there.
+
+- END
+- You can destroy by going bck to the Jenkinsfile and go to line `46 and line 51` and uncomment this section, if you want to destroy.
+- Then you comment the "Aply" OR "Destroy" in line 41 to 45.   {It will destroy everything or all the created resources including the VM Itself.
+  
 
 
 
