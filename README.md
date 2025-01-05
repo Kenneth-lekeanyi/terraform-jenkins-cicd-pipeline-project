@@ -125,6 +125,9 @@
     - os: **Ubuntu**
     - Version: **22.04 LTS (X86/64)**
     - Size: **30**  {because Jenkins is big}
+    - Click now on "Security"
+      - Under "Service Accounts", Locate "Access Scope"
+      - Check the box against "**Allow full access to all Cloud APIs**" {to enable the API, so that this jenkins VM with Jenkins running inside it will use this SA to access other resources and create them through the Pipeline.}
     - Click on "Select"
   - Under "Security" for SA, give full Access
   - Access scopes
